@@ -11,15 +11,7 @@ class VitternsEvent {
     constructor(public text: string) {}
 }
 
-const dictionary = [
-    "Duane", "Potts", "Markus", "Zhang", "Gaston", "Serrano", "Ashley", "Mason", "Meagan",
-    "Dougherty", "Ramona", "Russo", "Vincent", "Cruz", "Frederick", "Warren", "Maricela",
-    "Allen", "Dan", "Webster", "Brendon", "Singh", "Luisa", "King", "Milagros", "Vincent",
-    "Melinda", "Jordan", "Ola", "Hinton", "Patricia", "Valdez", "Forest", "Nolan",
-    "Harley", "Banks", "Vernon", "Abbott", "Chrystal", "Ali", "Damon", "Fritz", "Barbara",
-    "Brock", "Jefferey", "Atkins", "Vanessa", "Levine", "Sonja", "Zuniga", "Elma",
-    "Brown", "Lara", "Garrett", "Mathew", "Bridges", "Nicholas", "Brooks", "Judith", "Mcbride"
-];
+const dictionary:string[] = [];
 
 const results:VitternsEvent[] = []
 
@@ -30,6 +22,21 @@ function startGame() {
     canvasDiv.style.display = 'flex';
     const scoreDiv = vitterns.getTypedElementById(HTMLDivElement, 'score-container');
     scoreDiv.style.display = 'none';
+
+    if (dictionary.length < TESTS) {
+        while (dictionary.length > 0) {
+            dictionary.pop();
+        }
+        dictionary.push(...[
+            "Duane", "Potts", "Markus", "Zhang", "Gaston", "Serrano", "Ashley", "Mason", "Meagan",
+            "Dougherty", "Ramona", "Russo", "Vincent", "Cruz", "Frederick", "Warren", "Maricela",
+            "Allen", "Dan", "Webster", "Brendon", "Singh", "Luisa", "King", "Milagros", "Vincent",
+            "Melinda", "Jordan", "Ola", "Hinton", "Patricia", "Valdez", "Forest", "Nolan",
+            "Harley", "Banks", "Vernon", "Abbott", "Chrystal", "Ali", "Damon", "Fritz", "Barbara",
+            "Brock", "Jefferey", "Atkins", "Vanessa", "Levine", "Sonja", "Zuniga", "Elma",
+            "Brown", "Lara", "Garrett", "Mathew", "Bridges", "Nicholas", "Brooks", "Judith", "Mcbride"
+        ]);
+    }
     
     while (results.length > 0) {
         results.pop();
