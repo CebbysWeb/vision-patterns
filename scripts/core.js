@@ -29,6 +29,9 @@ class VitternsDocument {
     addEventListener(type, listener) {
         this.window.addEventListener(type, listener);
     }
+    milliseconds() {
+        return window.performance.now();
+    }
 }
 class VitternsCanvas {
     canvas;
@@ -48,13 +51,12 @@ class VitternsCanvas {
         return this;
     }
     clear() {
-        this.ctx.fillStyle = '#FFFFFF';
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         return this;
     }
     fill(color) {
         this.ctx.fillStyle = color.hex();
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         return this;
     }
     rect(position, size, color) {

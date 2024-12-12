@@ -1,4 +1,6 @@
 "use strict";
+const TIMEOUT = 150;
+const TESTS = 5;
 const CANVAS = vitterns.getCanvas();
 CANVAS.resize();
 class VitternsEvent {
@@ -20,60 +22,82 @@ const dictionary = [
     "Brown", "Lara", "Garrett", "Mathew", "Bridges", "Nicholas", "Brooks", "Judith", "Mcbride"
 ];
 const results = [];
-const ctx = CANVAS.canvas.getContext('2d');
-// Function to clear canvas and display a random digit
-function displayRandomDigit() {
-    const randomDigit = Math.floor(Math.random() * 10); // Generate a random digit (0-9)
-    ctx.clearRect(0, 0, CANVAS.canvas.width, CANVAS.canvas.height); // Clear canvas
-    ctx.font = '100px Arial';
-    ctx.fillStyle = '#000';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(randomDigit.toString(10), CANVAS.canvas.width / 2, CANVAS.canvas.height / 2); // Display digit in the center
+function startGame() {
+    vitterns.getButtonById('start-button').disabled = true;
+    const canvasDiv = vitterns.getTypedElementById(HTMLDivElement, 'canvas-container');
+    canvasDiv.style.display = 'flex';
+    const scoreDiv = vitterns.getTypedElementById(HTMLDivElement, 'score-container');
+    scoreDiv.style.display = 'none';
+    while (results.length > 0) {
+        results.pop();
+    }
+    nextStage();
+}
+function onGameEnd() {
+    vitterns.getButtonById('start-button').disabled = false;
+    const canvasDiv = vitterns.getTypedElementById(HTMLDivElement, 'canvas-container');
+    canvasDiv.style.display = 'none';
+    const scoreDiv = vitterns.getTypedElementById(HTMLDivElement, 'score-container');
+    scoreDiv.style.display = 'flex';
+    const tableBody = vitterns.document.getElementById('table-body');
+    if (tableBody) {
+        for (const child of tableBody.children) {
+            tableBody.removeChild(child);
+        }
+        for (const result of results) {
+            const row = vitterns.document.createElement('tr');
+            const name = vitterns.document.createElement('td');
+            name.textContent = result.text;
+            row.appendChild(name);
+            const time = vitterns.document.createElement('td');
+            const number = Math.floor(result.end - result.start);
+            time.textContent = `${number}ms`;
+            row.appendChild(time);
+            const match = vitterns.document.createElement('td');
+            if (result.match) {
+                match.classList.add('guessed-yes');
+                match.textContent = 'Pareizi';
+            }
+            else {
+                match.classList.add('guessed-no');
+                match.textContent = 'Nepareizi';
+            }
+            row.appendChild(match);
+            tableBody.appendChild(row);
+        }
+    }
+}
+function nextStage() {
+    const index = Math.floor(Math.random() * dictionary.length);
+    const name = dictionary.splice(index, 1)[0];
+    const event = new VitternsEvent(name);
+    const offset = 1000;
+    CANVAS.clear();
+    setTimeout(() => {
+        const margin = CANVAS.size().scale(0.2);
+        const size = CANVAS.size().scale(0.6);
+        const position = new Vector2D(margin.x + Math.random() * size.x, margin.y + Math.random() * size.y);
+        CANVAS.text(name, position, 50, Color.rgb8(255, 0, 0));
+        event.start = vitterns.milliseconds();
+        setTimeout(() => {
+            CANVAS.clear();
+            event.end = vitterns.milliseconds();
+            setTimeout(() => {
+                const result = prompt("Ko tu redzēji uz ekrāna?");
+                event.match = (result && event.text.toLowerCase() === result?.toLowerCase());
+                results.push(event);
+                if (results.length === TESTS) {
+                    var correct = results.filter((event) => event.match).length;
+                    alert(`Jūs atbildējāt pareizi uz ${correct} no ${TESTS} jautājumiem`);
+                    console.log(JSON.stringify(results));
+                    onGameEnd();
+                }
+                else {
+                    nextStage();
+                }
+            }, offset);
+        }, TIMEOUT);
+    }, offset);
 }
 // Event listeners for buttons
-vitterns.getButtonById('start-button').addEventListener('click', () => {
-    CANVAS.fill(Color.rgb8(50, 50, 50));
-    const name = dictionary[Math.floor(Math.random() * dictionary.length)];
-    const event = new VitternsEvent(name);
-    setTimeout(() => {
-        console.log('Pushing text to canvas');
-        CANVAS.text(name, CANVAS.size().scale(0.5), 50, Color.rgb8(255, 0, 0));
-        event.start = window.performance.now();
-    }, 1500);
-    setTimeout(() => {
-        console.log('Clearing canvas');
-        CANVAS.clear();
-        event.end = window.performance.now();
-    }, 1600);
-    setTimeout(() => {
-        const result = prompt("Ko tu redzēji uz ekrāna?");
-        event.match = (result && event.text.toLowerCase() === result?.toLowerCase());
-        results.push(event);
-        if (results.length === 10) {
-            console.log('All events have been processed');
-            var correct = results.filter((event) => event.match).length;
-            alert(`Jūs atbildējāt pareizi uz '${correct}' no 10 jautājumiem`);
-            console.log(JSON.stringify(results));
-        }
-    }, 2000);
-});
-vitterns.getButtonById('button2').addEventListener('click', () => {
-    ctx.clearRect(0, 0, CANVAS.canvas.width, CANVAS.canvas.height);
-    ctx.beginPath();
-    ctx.arc(400, 300, 100, 0, Math.PI * 2, true);
-    ctx.fillStyle = '#28a745';
-    ctx.fill();
-});
-vitterns.getButtonById('button3').addEventListener('click', () => {
-    ctx.clearRect(0, 0, CANVAS.canvas.width, CANVAS.canvas.height);
-    ctx.font = '30px Arial';
-    ctx.fillStyle = '#dc3545';
-    ctx.fillText('Hello Canvas!', 300, 300);
-});
-// Event listener for key press
-document.addEventListener('keydown', (event) => {
-    if (event.code === 'Space') { // Check if the spacebar is pressed
-        displayRandomDigit();
-    }
-});
+vitterns.getButtonById('start-button').addEventListener('click', startGame);

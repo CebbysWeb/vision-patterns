@@ -11,12 +11,23 @@
 
 <body>
     <div id="controls">
-        <button id="start-button">Start</button>
-        <button id="button2">Button 2</button>
-        <button id="button3">Button 3</button>
+        <button id="start-button">Sākt</button>
     </div>
     <div id="canvas-container">
         <canvas id="canvas">Your browser does not support canvas</canvas>
+    </div>
+    <div id="score-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Vārds</th>
+                    <th>Laiks uz ekrāna</th>
+                    <th>Atminēts</th>
+                </tr>
+                <tbody id="table-body">
+                </tbody>
+            </thead>
+        </table>
     </div>
     <script src="scripts/utility/function.js"></script>
     <script src="scripts/utility/typing.js"></script>
