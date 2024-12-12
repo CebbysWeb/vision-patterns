@@ -1,0 +1,1 @@
+vitterns.addEventListener(VitternsWindowEvent.RESIZE, vitterns.getCanvas().resize);

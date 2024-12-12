@@ -1,11 +1,33 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Home</title>
-        <link rel="stylesheet" type="text/css" href="resources/reset.css">
-        <link rel="stylesheet" type="text/css" href="resources/style.css">
-    </head>
-    <body>
-        <h1>Hello World!</h1>
-    </body>
+
+<head>
+    <title>Web App with Canvas</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="resources/reset.css">
+    <link rel="stylesheet" type="text/css" href="resources/style.css">
+</head>
+
+<body>
+    <div id="controls">
+        <button id="start-button">Start</button>
+        <button id="button2">Button 2</button>
+        <button id="button3">Button 3</button>
+    </div>
+    <div id="canvas-container">
+        <canvas id="canvas">Your browser does not support canvas</canvas>
+    </div>
+    <script src="scripts/utility/function.js"></script>
+    <script src="scripts/utility/typing.js"></script>
+    <script src="scripts/math/index.js"></script>
+    <script src="scripts/math/hex.js"></script>
+    <script src="scripts/collections.js"></script>
+    <script src="scripts/core.js"></script>
+    <script src="scripts/canvas/component.js"></script>
+    <script src="scripts/canvas/style.js"></script>
+    <script src="scripts/events/window.js"></script>
+    <script src="scripts/main.js"></script>
+</body>
+
 </html>
